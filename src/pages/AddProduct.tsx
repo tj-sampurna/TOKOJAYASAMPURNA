@@ -9,6 +9,7 @@ export default function AddProduct() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
+  const [stock, setStock] = useState("1");
   const [category, setCategory] = useState("");
   const [files, setFiles] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
@@ -20,7 +21,7 @@ export default function AddProduct() {
       // =========================
       // VALIDASI
       // =========================
-      if (!title || !description || !price || !category) {
+      if (!title || !description || !price || !category || !stock) {
         alert("Lengkapi semua data");
         return;
       }
@@ -77,10 +78,13 @@ export default function AddProduct() {
         .from("products")
         .insert({
           title,
+          name: title,
           description,
           price: Number(price),
+          stock: Number(stock),
           category,
-          images: imageUrls
+          images: imageUrls,
+          image_url: imageUrls[0]
         });
 
       if (error) {
@@ -205,6 +209,22 @@ export default function AddProduct() {
                 <option value="Hobi & Olahraga">Olahraga, Hobi, & Alat Musik</option>
                 <option value="Lain-lain">Lain-lain / Lainnya</option>
               </select>
+            </div>
+            
+            {/* Stok */}
+            <div className="space-y-1.5 sm:col-span-2">
+              <label className="text-[10px] font-black uppercase text-gray-500 block tracking-wider">
+                Jumlah Stok Produk *
+              </label>
+              <input
+                type="number"
+                min="1"
+                placeholder="cth. 10"
+                value={stock}
+                onChange={(e) => setStock(e.target.value)}
+                required
+                className="w-full bg-[#f2f4f5]/80 px-4 py-3 rounded-xl text-xs sm:text-sm outline-none border-2 border-transparent focus:border-slate-800 transition"
+              />
             </div>
 
           </div>

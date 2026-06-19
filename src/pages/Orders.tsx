@@ -195,6 +195,27 @@ export default function Orders() {
                 .from('payments')
                 .update({ status: 'FAILED' })
                 .eq('invoice', ord.invoice);
+              
+              // Restore stock
+              if (ord.product_id) {
+                try {
+                  const { data: currentProduct } = await supabase
+                    .from('products')
+                    .select('stock')
+                    .eq('id', ord.product_id)
+                    .maybeSingle();
+
+                  if (currentProduct) {
+                    const quantityToRestore = ord.quantity || 1;
+                    await supabase
+                      .from('products')
+                      .update({ stock: currentProduct.stock + quantityToRestore })
+                      .eq('id', ord.product_id);
+                  }
+                } catch (e) {
+                  console.error("Failed to restore stock on expiration:", e);
+                }
+              }
             }
           }
         }

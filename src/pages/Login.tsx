@@ -51,7 +51,12 @@ export default function Login() {
 
   return (
     <div className="min-h-screen bg-[#f2f4f5] flex items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-2xl border border-gray-100 shadow-lg text-left">
+      <div className="relative max-w-md w-full rounded-2xl overflow-hidden p-[2px] shadow-lg">
+        {/* Shimmer Rotating Animation */}
+        <div className="absolute inset-[-50%] z-0 animate-[spin_4s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#f2f4f5_0%,#002f34_50%,#f2f4f5_100%)] opacity-80" />
+        
+        {/* Card Content Area */}
+        <div className="relative z-10 w-full bg-white p-8 rounded-2xl text-left h-full space-y-8">
         <div className="text-center">
           <div className="inline-flex mb-3">
             <TJSLogo size="lg" className="border border-gray-100 shadow-sm" />
@@ -157,6 +162,7 @@ export default function Login() {
           Daftarkan akun baru melalui menu daftar di atas. Gunakan alamat email yang mengandung kata 
           <b> "admin"</b> (contoh: <code>admin@gmail.com</code>) untul masuk otomatis sebagai Administrator 
           guna menguji pengelolaan katalog serta verifikasi penawaran nasional.
+        </div>
         </div>
       </div>
     </div>

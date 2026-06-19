@@ -100,7 +100,6 @@ async function startServer() {
     product_id: any;
     invoice: string;
     amount: number;
-    quantity: number;
     payment_method: string;
     payment_url: string;
     reference: string | null;
@@ -196,12 +195,13 @@ async function startServer() {
               .single();
               
             if (!fetchProdErr && currentProduct) {
-              const newStock = Math.max(0, currentProduct.stock - 1);
+              const requestedQuantity = 1;
+              const newStock = Math.max(0, currentProduct.stock - requestedQuantity);
               await supabase
                 .from("products")
                 .update({ stock: newStock })
                 .eq("id", validProductId);
-              console.log(`[Supabase][products] Decremented stock for product ${validProductId} to ${newStock} (Order Created)`);
+              console.log(`[Supabase][products] Decremented stock for product ${validProductId} by ${requestedQuantity} to ${newStock} (Order Created)`);
             }
           } catch (e) {
             console.error("[Supabase][products] Failed to decrement product stock:", e);
@@ -339,6 +339,37 @@ async function startServer() {
 
               // Update database status immediately
               if (supabase) {
+                // --- STOCK RESTORATION LOGIC ---
+                if (finalStatus === "FAILED" && paymentInfo.status !== "FAILED") {
+                  try {
+                    const { data: currentOrder, error: checkErr } = await supabase
+                      .from("orders")
+                      .select("status, product_id")
+                      .eq("invoice", invoiceId)
+                      .maybeSingle();
+
+                    if (!checkErr && currentOrder && currentOrder.status !== "FAILED" && currentOrder.product_id) {
+                      const { data: currentProduct } = await supabase
+                        .from("products")
+                        .select("stock")
+                        .eq("id", currentOrder.product_id)
+                        .maybeSingle();
+
+                      if (currentProduct) {
+                        const quantityToRestore = 1;
+                        await supabase
+                          .from("products")
+                          .update({ stock: currentProduct.stock + quantityToRestore })
+                          .eq("id", currentOrder.product_id);
+                        console.log(`[Server][check-payment] Restored stock for product ${currentOrder.product_id} by ${quantityToRestore} due to FAILED payment.`);
+                      }
+                    }
+                  } catch (e) {
+                    console.error("[Server][check-payment] Stock restoration error:", e);
+                  }
+                }
+                // --------------------------------
+
                 await supabase.from("orders").update({ status: finalStatus, payment_method: mStatus.payment_type || mStatus.payment_method }).eq("invoice", invoiceId);
                 await supabase.from("payments").update({ status: finalStatus, method: mStatus.payment_type || mStatus.payment_method }).eq("invoice", invoiceId);
               }
@@ -488,8 +519,9 @@ async function startServer() {
   app.post("/api/create-payment", async (req, res) => {
     try {
       console.log("[Server][create-payment] Received request body:", req.body);
-      const { amount, user_id, email, invoice, paymentMethod, customer_name, productId, product_id, productName } = req.body;
+      const { amount, user_id, email, invoice, paymentMethod, customer_name, productId, product_id, productName, quantity } = req.body;
       const targetProductId = product_id || productId;
+      const requestedQuantity = Number(quantity) || 1;
 
       // 1. INPUTS STRICT VALIDATIONS (Prevent payment injection vulnerabilities)
       if (amount === undefined || amount === null || isNaN(Number(amount))) {
@@ -567,7 +599,6 @@ async function startServer() {
           product_id: targetProductId || null,
           invoice: orderId,
           amount: paymentAmount,
-          quantity: 1,
           payment_method: paymentMethod,
           payment_url: simulatedUrl,
           reference: stateData.reference,
@@ -655,7 +686,6 @@ async function startServer() {
             product_id: targetProductId || null,
             invoice: orderId,
             amount: paymentAmount,
-            quantity: 1,
             payment_method: paymentMethod,
             payment_url: midtransResult.redirect_url,
             reference: midtransResult.token,
@@ -785,11 +815,12 @@ async function startServer() {
                  .maybeSingle();
 
                if (currentProduct) {
+                 const quantityToRestore = 1;
                  await supabase
                    .from("products")
-                   .update({ stock: currentProduct.stock + 1 })
+                   .update({ stock: currentProduct.stock + quantityToRestore })
                    .eq("id", currentOrder.product_id);
-                 console.log(`[Webhook][Callback] Restored stock for product ${currentOrder.product_id} due to FAILED payment.`);
+                 console.log(`[Webhook][Callback] Restored stock for product ${currentOrder.product_id} by ${quantityToRestore} due to FAILED payment.`);
                }
              }
            }

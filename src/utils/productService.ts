@@ -10,14 +10,17 @@ async function executeResilient(table: string, operation: 'insert' | 'update', p
     let query: any = supabase.from(table);
     
     if (operation === 'insert') {
-      query = query.insert(attemptPayload);
+      query = query.insert(attemptPayload).select();
     } else if (operation === 'update') {
-      query = query.update(attemptPayload).eq('id', id);
+      query = query.update(attemptPayload).eq('id', id).select();
     }
 
     const { data, error } = await query;
 
     if (!error) {
+      if (operation === 'update' && (!data || data.length === 0)) {
+        return { data: null, error: new Error('Product not found or access denied by RLS.') };
+      }
       return { data, error: null };
     }
 
@@ -90,21 +93,44 @@ export async function updateProduct(id: string, data: any) {
 }
 
 export async function deleteProduct(id: string) {
-  // First, delete any referencing orders to avoid foreign key violations
-  await supabase
-    .from("orders")
-    .delete()
-    .eq("product_id", id);
+  // Clear any existing references to avoid foreign key violations
+  try {
+    const { data: orders } = await supabase.from('orders').select('id').eq('product_id', id);
+    if (orders && orders.length > 0) {
+      const orderIds = orders.map((o: any) => o.id);
+      
+      // Clean up payments
+      await supabase.from('payments').delete().in('order_id', orderIds);
+      
+      // Clean up transactions if exists (ignore error if table doesn't exist)
+      const { error: txError } = await supabase.from('transactions').delete().in('order_id', orderIds);
+      if (txError) console.warn("Failed to delete from transactions", txError);
 
-  const { error } = await supabase
+      // Clean up orders
+      const { error: orderError } = await supabase.from('orders').delete().in('id', orderIds);
+      if (orderError) console.warn("Failed to delete orders", orderError);
+    }
+  } catch (err) {
+    console.warn("Soft fail on reference cleanup", err);
+  }
+
+  // Then delete the actual product
+  const { data, error } = await supabase
     .from("products")
     .delete()
-    .eq("id", id);
+    .eq("id", id)
+    .select();
 
   if (error) {
     console.log("DELETE ERROR:", error.message);
+    return { error };
   }
-  return { error };
+
+  if (!data || data.length === 0) {
+    return { error: new Error('Product not found or access denied by RLS.') };
+  }
+
+  return { error: null };
 }
 
 export async function addProduct(
