@@ -2,7 +2,7 @@
   "version": 2,
   "builds": [
     {
-      "src": "dist/server.cjs",
+      "src": "dist/server.js",
       "use": "@vercel/node"
     },
     {
@@ -11,14 +11,14 @@
       "config": { "distDir": "dist" }
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api/(.*)",
-      "dest": "dist/server.cjs"
+      "source": "/api/(.*)",
+      "destination": "dist/server.js"
     },
     {
-      "src": "/(.*)",
-      "dest": "/$1"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
