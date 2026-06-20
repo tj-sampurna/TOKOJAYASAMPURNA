@@ -26,3 +26,18 @@ Pastikan Anda telah menginstal [Node.js](https://nodejs.org/) di komputer Anda.
 '''
 
 
+Clone repositori ini:
+'''bash
+git clone https://github.com/tj-sampurna/TOKOJAYASAMPURNA.git
+'''
+cd TOKOJAYASAMPURNA
+
+Konfigurasi Environment:
+Buat file .env.local di folder utama dan tambahkan variabel yang diperlukan:
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+Jalankan aplikasi:
+npm run dev
+
+
