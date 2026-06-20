@@ -28,9 +28,8 @@ if (isSupabaseConfigured) {
   console.log(`[Server] Supabase Admin credentials placeholder or missing. Falling back to local internal memory state and client-side simulation storage.`);
 }
 
-async function startServer() {
-  const app = express();
-  const PORT = 3000;
+const app = express();
+const PORT = 3000;
 
   // 1. Basic Security Header Protection (Manual Lightweight Helmet Alternative)
   app.use((req, res, next) => {
@@ -905,11 +904,12 @@ async function startServer() {
 
   // Vite development middleware vs Static Production files
   if (process.env.NODE_ENV !== "production") {
-    const vite = await createViteServer({
+    createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
+    }).then((vite) => {
+      app.use(vite.middlewares);
     });
-    app.use(vite.middlewares);
   } else {
     const distPath = path.join(process.cwd(), "dist");
     app.use(express.static(distPath));
@@ -923,9 +923,10 @@ async function startServer() {
     res.status(500).json({ success: false, error: "Internal Server crash secured." });
   });
 
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`[Server] running on http://localhost:${PORT} in ${process.env.NODE_ENV || "development"} mode`);
-  });
-}
+  if (process.env.NODE_ENV !== "production") {
+    app.listen(PORT, "0.0.0.0", () => {
+      console.log(`[Server] running on http://localhost:${PORT} in ${process.env.NODE_ENV || "development"} mode`);
+    });
+  }
 
-startServer();
+export default app;

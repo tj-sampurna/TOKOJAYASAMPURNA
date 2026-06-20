@@ -1,33 +1,20 @@
-# TOKOJAYASAMPURNA
+<div align="center">
+<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
+</div>
 
-Aplikasi toko online yang dirancang untuk kemudahan manajemen inventaris, transaksi aman, dan pengalaman belanja yang optimal bagi pengguna.
+# Run and deploy your AI Studio app
 
-## 🚀 Fitur Utama
+This contains everything you need to run your app locally.
 
-### 👤 User
-- **Auth System:** Registrasi dan Login pengguna yang aman.
-- **Keranjang Belanja:** Kelola produk yang ingin dibeli dengan mudah.
-- **Checkout & Pembayaran:** Integrasi sistem pembayaran **Midtrans** untuk transaksi yang otomatis dan aman.
-- **Saran Produk:** Fitur rekomendasi produk untuk meningkatkan pengalaman belanja pengguna.
+View your app in AI Studio: https://ai.studio/apps/6732f262-7763-4eec-88b4-b05ed73f64db
 
-### 🛡️ Admin Panel
-- **Manajemen Produk:** Admin dapat melakukan Upload, Edit, dan Hapus produk dengan mudah.
-- **Multi-Gambar:** Mendukung pengunggahan banyak gambar untuk satu produk.
-- **Manajemen Kategori:** Mengelompokkan produk berdasarkan kategori untuk navigasi yang lebih baik.
-- **Akses Eksklusif:** Halaman khusus admin untuk memantau operasional toko secara real-time.
+## Run Locally
 
-## 🛠️ Teknologi yang Digunakan
-- **Frontend:** TypeScript, Vite, React
-- **Backend/Database:** Supabase (PostgreSQL)
-- **Payment Gateway:** Midtrans
-- **Deployment:** Vercel
+**Prerequisites:**  Node.js
 
-## 💻 Cara Menjalankan Secara Lokal
 
-Pastikan Anda telah menginstal [Node.js](https://nodejs.org/) di komputer Anda.
-
-1. **Clone repositori ini:**
-```bash
-   git clone [https://github.com/tj-sampurna/TOKOJAYASAMPURNA.git](https://github.com/tj-sampurna/TOKOJAYASAMPURNA.git)
-   cd TOKOJAYASAMPURNA
-'''
+1. Install dependencies:
+   `npm install`
+2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+3. Run the app:
+   `npm run dev`
