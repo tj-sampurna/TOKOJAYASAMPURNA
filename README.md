@@ -1,43 +1,33 @@
 # TOKOJAYASAMPURNA
 
-Aplikasi web untuk pengelolaan data dan operasional Toko Jaya Sampurna. Aplikasi ini dirancang untuk memudahkan manajemen inventaris barang bekas berkualitas secara efisien dan terintegrasi.
+Aplikasi toko online yang dirancang untuk kemudahan manajemen inventaris, transaksi aman, dan pengalaman belanja yang optimal bagi pengguna.
 
-## Deskripsi Proyek
-Proyek ini dikembangkan dengan fokus pada kemudahan akses data dan efisiensi pengelolaan stok. Menggunakan teknologi modern untuk memastikan aplikasi berjalan cepat, responsif, dan mudah dipelihara.
+## 🚀 Fitur Utama
 
-## Teknologi yang Digunakan
+### 👤 User
+- **Auth System:** Registrasi dan Login pengguna yang aman.
+- **Keranjang Belanja:** Kelola produk yang ingin dibeli dengan mudah.
+- **Checkout & Pembayaran:** Integrasi sistem pembayaran **Midtrans** untuk transaksi yang otomatis dan aman.
+- **Saran Produk:** Fitur rekomendasi produk untuk meningkatkan pengalaman belanja pengguna.
+
+### 🛡️ Admin Panel
+- **Manajemen Produk:** Admin dapat melakukan Upload, Edit, dan Hapus produk dengan mudah.
+- **Multi-Gambar:** Mendukung pengunggahan banyak gambar untuk satu produk.
+- **Manajemen Kategori:** Mengelompokkan produk berdasarkan kategori untuk navigasi yang lebih baik.
+- **Akses Eksklusif:** Halaman khusus admin untuk memantau operasional toko secara real-time.
+
+## 🛠️ Teknologi yang Digunakan
 - **Frontend:** TypeScript, Vite, React
-- **Database:** Supabase (PostgreSQL)
+- **Backend/Database:** Supabase (PostgreSQL)
+- **Payment Gateway:** Midtrans
 - **Deployment:** Vercel
 
-## Fitur Utama
-- [ ] Manajemen Inventaris Barang
-- [ ] Pencatatan Data Transaksi
-- [ ] Tampilan Responsif (Mobile-Friendly)
-
-## Cara Menjalankan Secara Lokal
+## 💻 Cara Menjalankan Secara Lokal
 
 Pastikan Anda telah menginstal [Node.js](https://nodejs.org/) di komputer Anda.
 
 1. **Clone repositori ini:**
-   ```bash
+```bash
    git clone [https://github.com/tj-sampurna/TOKOJAYASAMPURNA.git](https://github.com/tj-sampurna/TOKOJAYASAMPURNA.git)
    cd TOKOJAYASAMPURNA
 '''
-
-
-Clone repositori ini:
-'''bash
-git clone https://github.com/tj-sampurna/TOKOJAYASAMPURNA.git
-'''
-cd TOKOJAYASAMPURNA
-
-Konfigurasi Environment:
-Buat file .env.local di folder utama dan tambahkan variabel yang diperlukan:
-VITE_SUPABASE_URL=your_supabase_url
-VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-
-Jalankan aplikasi:
-npm run dev
-
-
