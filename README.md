@@ -1,20 +1,28 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+# TOKOJAYASAMPURNA
 
-# Run and deploy your AI Studio app
+Aplikasi web untuk pengelolaan data dan operasional Toko Jaya Sampurna. Aplikasi ini dirancang untuk memudahkan manajemen inventaris barang bekas berkualitas secara efisien dan terintegrasi.
 
-This contains everything you need to run your app locally.
+## Deskripsi Proyek
+Proyek ini dikembangkan dengan fokus pada kemudahan akses data dan efisiensi pengelolaan stok. Menggunakan teknologi modern untuk memastikan aplikasi berjalan cepat, responsif, dan mudah dipelihara.
 
-View your app in AI Studio: https://ai.studio/apps/6732f262-7763-4eec-88b4-b05ed73f64db
+## Teknologi yang Digunakan
+- **Frontend:** TypeScript, Vite, React
+- **Database:** Supabase (PostgreSQL)
+- **Deployment:** Vercel
 
-## Run Locally
+## Fitur Utama
+- [ ] Manajemen Inventaris Barang
+- [ ] Pencatatan Data Transaksi
+- [ ] Tampilan Responsif (Mobile-Friendly)
 
-**Prerequisites:**  Node.js
+## Cara Menjalankan Secara Lokal
+
+Pastikan Anda telah menginstal [Node.js](https://nodejs.org/) di komputer Anda.
+
+1. **Clone repositori ini:**
+   ```bash
+   git clone [https://github.com/tj-sampurna/TOKOJAYASAMPURNA.git](https://github.com/tj-sampurna/TOKOJAYASAMPURNA.git)
+   cd TOKOJAYASAMPURNA
+'''
 
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
